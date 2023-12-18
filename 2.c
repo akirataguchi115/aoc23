@@ -2,20 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 #define MAX_LENGTH 256
-#define THRESHHOLD_RED 12
-#define THRERSHOLD_GREEN 13
-#define THRESHHOLD_BLUE 14
 
 int main() {
-	int triangularSum = 0;
-	for (int i = 1; i <= 100; i++) {
-		triangularSum += i;
-	}
-
 	FILE *filePointer = fopen("input/2.txt", "r");
 	char buffer[MAX_LENGTH];
+	int powerSum = 0;
 
 	for (int gameIndex = 0; fgets(buffer, MAX_LENGTH, filePointer); gameIndex++) {
+		int maxRed = 0, maxGreen = 0, maxBlue = 0;
 		char* ptr = strtok(buffer, " ");
 		ptr = strtok(NULL, " ");
 		ptr = strtok(NULL, " ");
@@ -25,23 +19,25 @@ int main() {
 			ptr = strtok(NULL, " ");
 			strcpy(token, ptr);
 			ptr = strtok(NULL, " ");
-			if (strstr(token, "red") && number > THRESHHOLD_RED) {
-				triangularSum = triangularSum - (gameIndex + 1);
-				break;
+			if (strstr(token, "red") && number > maxRed) {
+				maxRed = number;
+				continue;
 			}
-			if (strstr(token, "green") && number > THRERSHOLD_GREEN) {
-				triangularSum = triangularSum - (gameIndex + 1);
-				break;
+			if (strstr(token, "green") && number > maxGreen) {
+				maxGreen = number;
+				continue;
 			}
-			if (strstr(token, "blue") && number > THRESHHOLD_BLUE) {
-				triangularSum = triangularSum - (gameIndex + 1);
-				break;
+			if (strstr(token, "blue") && number > maxBlue) {
+				maxBlue = number;
+				continue;
 			}
 		}
+		powerSum = powerSum + (maxRed * maxGreen * maxBlue);
 	}
 
 	fclose(filePointer);
-	printf("%d", triangularSum);
+	printf("%d", powerSum);
+
 	return 0;
 }
 
