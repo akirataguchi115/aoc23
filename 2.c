@@ -1,31 +1,49 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define MAX_LENGTH 256
+#define THRESHHOLD_RED 12
+#define THRERSHOLD_GREEN 13
+#define THRESHHOLD_BLUE 14
 
 int main() {
-	int sum = 0;
-	for (int i = 1; i < 100; i++) {
-		sum += i;
+	int triangularSum = 0;
+	for (int i = 1; i <= 100; i++) {
+		triangularSum += i;
 	}
 
-	FILE *fp = fopen("input/2.txt", "r");
+	FILE *filePointer = fopen("input/2.txt", "r");
 	char buffer[MAX_LENGTH];
 
-	for (int i = 0; fgets(buffer, MAX_LENGTH, fp); i++) {
-		char *ptr = strtok(buffer, " ");
+	for (int gameIndex = 0; fgets(buffer, MAX_LENGTH, filePointer); gameIndex++) {
+		char* ptr = strtok(buffer, " ");
+		ptr = strtok(NULL, " ");
+		ptr = strtok(NULL, " ");
 		char token[512];
 		while (ptr) {
-			strcpy(token, ptr);
-			printf("'%s'\n", token);
+			int number = atoi(ptr);
 			ptr = strtok(NULL, " ");
+			strcpy(token, ptr);
+			ptr = strtok(NULL, " ");
+			if (strstr(token, "red") && number > THRESHHOLD_RED) {
+				triangularSum = triangularSum - (gameIndex + 1);
+				break;
+			}
+			if (strstr(token, "green") && number > THRERSHOLD_GREEN) {
+				triangularSum = triangularSum - (gameIndex + 1);
+				break;
+			}
+			if (strstr(token, "blue") && number > THRESHHOLD_BLUE) {
+				triangularSum = triangularSum - (gameIndex + 1);
+				break;
+			}
 		}
 	}
-	fclose(fp);
 
+	fclose(filePointer);
+	printf("%d", triangularSum);
 	return 0;
 }
-
-// split line to tokens
 
 // Ariel, listen to me
 // OO languages?
